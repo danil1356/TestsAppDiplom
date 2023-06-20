@@ -24,9 +24,17 @@ public class Tests extends BaseEntity {
     @Column(name = "author", nullable = false)
     private String author;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-    private Users user;
+    @ManyToMany(mappedBy = "testsSet", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private Set<Users> usersAccess;
+//    @PrePersist
+//    public void addUser(){
+//        usersAccess.forEach(user -> user.getTestsSet().add(this));
+//    }
+    @PreRemove
+    public void removeUsers(){
+        usersAccess.forEach(user -> user.getTestsSet().remove(this));
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "theme_id", nullable = false, referencedColumnName = "id")
@@ -49,12 +57,11 @@ public class Tests extends BaseEntity {
     public Tests() {
     }
 
-    public Tests(Long id, String name, Time execution_time, String author, Users user, Themes theme, SubTheme subTheme) {
+    public Tests(Long id, String name, Time execution_time, String author, Themes theme, SubTheme subTheme) {
         super(id);
         this.name = name;
         this.execution_time = execution_time;
         this.author = author;
-        this.user = user;
         this.theme = theme;
         this.subTheme = subTheme;
     }

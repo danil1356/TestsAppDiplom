@@ -13,13 +13,10 @@ import java.io.Serializable;
 @Data
 public class StatisticsDto implements Serializable {
     private final Long id;
-    private final Integer test_result;
-
+    private final Long test_result;
     private final Long tests_id;
-    //private final TestsDto test;
-
     private final Long user_id;
-    //private final UsersDto user;
+    private final String pass_name;
 
 
 
@@ -29,7 +26,8 @@ public class StatisticsDto implements Serializable {
                 this.id,
                 this.test_result,
                 new Tests(this.tests_id),
-                new Users(this.user_id)
+                new Users(this.user_id),
+                this.pass_name
         );
     }
 
@@ -39,7 +37,8 @@ public class StatisticsDto implements Serializable {
                 statistics.getId(),
                 statistics.getTest_result(),
                 statistics.getTest().getId(),
-                statistics.getUser().getId()
+                statistics.getUser().getId(),
+                statistics.getPass_name()
         );
     }
 }

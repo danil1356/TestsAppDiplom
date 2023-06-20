@@ -14,7 +14,10 @@ import javax.persistence.*;
 public class Statistics extends BaseEntity{
 
     @Column(name = "test_result", nullable = false)
-    private Integer test_result;
+    private Long test_result;
+
+    @Column(name = "pass_name", nullable = false)
+    private String pass_name;
 
     @ManyToOne
     @JoinColumn(name = "tests_id", nullable = false, referencedColumnName = "id")
@@ -31,9 +34,10 @@ public class Statistics extends BaseEntity{
         super(id);
     }
 
-    public Statistics(Long id, Integer test_result, Tests test, Users user) {
+    public Statistics(Long id, Long test_result, Tests test, Users user, String pass_name) {
         super(id);
         this.test_result = test_result;
+        this.pass_name = pass_name;
         this.test = test;
         this.user = user;
     }

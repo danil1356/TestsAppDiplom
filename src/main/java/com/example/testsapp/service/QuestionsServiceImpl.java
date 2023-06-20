@@ -34,8 +34,9 @@ public class QuestionsServiceImpl implements QuestionsService{
     }
 
     @Override
-    public void save(Questions question) {
-        questionsRepository.save(question);
+    public Questions save(Questions question) {
+        Questions questions = questionsRepository.save(question);
+        return questions;
     }
 
     @Override

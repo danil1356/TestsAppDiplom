@@ -13,4 +13,9 @@ public interface UsersService {
     void realDelete(Long id);
     void delete(Users user);
     Users findByLogin(String login);
+
+
+    void registrationTeacher(Users user, Long id);
+    Users registrationStudent(Users user);
+    void addGroup(Long userId, Long groupId);
 }

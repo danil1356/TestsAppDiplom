@@ -1,6 +1,10 @@
 package com.example.testsapp.representation.Controller;
 
+import com.example.testsapp.data.Entity.Groups;
+import com.example.testsapp.data.Entity.Users;
+import com.example.testsapp.representation.DTO.GroupsDTO;
 import com.example.testsapp.representation.DTO.UsersDto;
+import com.example.testsapp.service.GroupsService;
 import com.example.testsapp.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,8 +19,14 @@ import java.util.List;
 @RequestMapping(value = "/Users")
 public class UsersRestController {
 
+    private final UsersService usersService;
+    private final GroupsService groupsService;
+
     @Autowired
-    private UsersService usersService;
+    public UsersRestController(UsersService usersService, GroupsService groupsService) {
+        this.usersService = usersService;
+        this.groupsService = groupsService;
+    }
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -59,6 +69,38 @@ public class UsersRestController {
         return ResponseEntity.ok().build();
     }
 
+    //////
+    @RequestMapping(value = "/registrationTeacher/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UsersDto> registrationTeacher(@RequestBody UsersDto usersDto,  @PathVariable Long id)
+    {
+        if (usersDto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        this.usersService.registrationTeacher(usersDto.toEntity(), id);
+        return ResponseEntity.ok().build();
+    }
+    @RequestMapping(value = "/registrationStudent", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UsersDto> registrationStudent(@RequestBody UsersDto usersDto)
+    {
+        if (usersDto == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Users users = this.usersService.registrationStudent(usersDto.toEntity());
+        return ResponseEntity.ok(UsersDto.toDto(users));
+    }
+
+    @RequestMapping(value = "/addUserGroup/{userId}/{groupId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UsersDto> addUserGroup(@PathVariable Long userId,  @PathVariable Long groupId){
+
+        if (userId == null || groupId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        this.usersService.addGroup(userId, groupId);
+        return ResponseEntity.ok().build();
+    }
+    ////////
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<UsersDto> delete(@PathVariable Long id)
     {
@@ -95,4 +137,14 @@ public class UsersRestController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/getByLogin/{login}")
+    public ResponseEntity<UsersDto> getByLogin(@PathVariable String login){
+        if (login.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        UsersDto usersDto = UsersDto.toDto(this.usersService.findByLogin(login));
+
+        return ResponseEntity.ok(usersDto);
+    }
 }

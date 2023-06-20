@@ -1,5 +1,6 @@
 package com.example.testsapp.representation.Controller;
 
+import com.example.testsapp.data.Entity.Questions;
 import com.example.testsapp.representation.DTO.QuestionsDto;
 import com.example.testsapp.service.QuestionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,8 @@ public class QuestionsRestController {
             return ResponseEntity.badRequest().build();
         }
 
-        this.questionsService.save(questionsDto.toEntity());
-        return ResponseEntity.ok().build();
+        Questions questions = this.questionsService.save(questionsDto.toEntity());
+        return ResponseEntity.ok(QuestionsDto.toDto(questions));
     }
 
 
@@ -68,7 +69,7 @@ public class QuestionsRestController {
         }
 
         this.questionsService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(questionsDto);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)

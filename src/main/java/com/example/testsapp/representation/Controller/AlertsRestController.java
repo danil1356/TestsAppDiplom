@@ -1,8 +1,8 @@
 package com.example.testsapp.representation.Controller;
 
-import com.example.testsapp.data.Entity.Statistics;
-import com.example.testsapp.representation.DTO.StatisticsDto;
-import com.example.testsapp.service.StatisticsService;
+import com.example.testsapp.data.Entity.Alerts;
+import com.example.testsapp.representation.DTO.AlertsDto;
+import com.example.testsapp.service.AlertsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,32 +13,37 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/Statistics")
-public class StatisticsRestController {
+@RequestMapping(value = "/Alerts")
+public class AlertsRestController {
+
+    private final AlertsService alertsService;
 
     @Autowired
-    private StatisticsService statisticsService;
+    public AlertsRestController(AlertsService alertsService) {
+        this.alertsService = alertsService;
+    }
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<StatisticsDto> get(@PathVariable Long id)
+    public ResponseEntity<AlertsDto> get(@PathVariable Long id)
     {
         if(id == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        StatisticsDto statisticsDto = this.statisticsService.getById(id);
+        AlertsDto alertsDto = this.alertsService.getById(id);
 
-        if (statisticsDto == null) {
+        if (alertsDto == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(statisticsDto);
+        return ResponseEntity.ok(alertsDto);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<StatisticsDto>> getAll()
+    public ResponseEntity<List<AlertsDto>> getAll()
     {
-        List<StatisticsDto> list = this.statisticsService.getAll();
+        List<AlertsDto> list = this.alertsService.getAll();
 
         if (list.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -49,37 +54,37 @@ public class StatisticsRestController {
 
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<StatisticsDto> post(@RequestBody StatisticsDto statisticsDto)
+    public ResponseEntity<AlertsDto> post(@RequestBody AlertsDto alertsDto)
     {
-        if (statisticsDto == null) {
+        if (alertsDto == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Statistics statistics = this.statisticsService.save(statisticsDto.toEntity());
-        return ResponseEntity.ok(StatisticsDto.toDto(statistics));
+        Alerts alerts = this.alertsService.save(alertsDto.toEntity());
+        return ResponseEntity.ok(AlertsDto.toDto(alerts));
     }
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<StatisticsDto> delete(@PathVariable Long id)
+    public ResponseEntity<AlertsDto> delete(@PathVariable Long id)
     {
-        StatisticsDto statisticsDto = this.statisticsService.getById(id);
-        if (statisticsDto == null) {
+        AlertsDto alertsDto = this.alertsService.getById(id);
+        if (alertsDto == null) {
             return ResponseEntity.notFound().build();
         }
 
-        this.statisticsService.delete(id);
+        this.alertsService.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public ResponseEntity<StatisticsDto> update(@RequestBody @Validated StatisticsDto statisticsDto, UriComponentsBuilder builder)
+    public ResponseEntity<AlertsDto> update(@RequestBody @Validated AlertsDto alertsDto, UriComponentsBuilder builder)
     {
-        if(statisticsDto == null) {
+        if(alertsDto == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        this.statisticsService.save(statisticsDto.toEntity());
+        this.alertsService.save(alertsDto.toEntity());
         return ResponseEntity.ok().build();
     }
 }

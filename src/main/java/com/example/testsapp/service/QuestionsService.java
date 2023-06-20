@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface QuestionsService {
     QuestionsDto getById(Long id);
     List<QuestionsDto> getAll();
-    void save(Questions question);
+    Questions save(Questions question);
     void delete(Long id);
 }

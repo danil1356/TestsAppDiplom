@@ -5,6 +5,7 @@ import com.example.testsapp.data.Entity.Tests;
 import com.example.testsapp.data.Entity.Themes;
 import com.example.testsapp.data.Entity.Users;
 import lombok.Data;
+import org.apache.catalina.User;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -21,13 +22,13 @@ public class TestsDto implements Serializable {
     private final Time execution_time;
     private final String author;
 
-    private final Long user_id;
     //private final UsersDto user;
     private final Long theme_id;
     //private final ThemesDto theme;
     private final Long subthemes_id;
     //private final SubThemeDto subTheme;
 
+//    private  final Set<UsersDto> usersAccessSet;
     private final Set<QuestionsDto> questionsSet;
     private final Set<StatisticsDto> statisticsSet;
 
@@ -39,7 +40,6 @@ public class TestsDto implements Serializable {
                 this.name,
                 this.execution_time,
                 this.author,
-                new Users(this.user_id),
                 new Themes(this.theme_id),
                 new SubTheme(this.subthemes_id)
         );
@@ -52,9 +52,9 @@ public class TestsDto implements Serializable {
                 tests.getName(),
                 tests.getExecution_time(),
                 tests.getAuthor(),
-                tests.getUser().getId(),
                 tests.getTheme().getId(),
                 tests.getSubTheme().getId(),
+//                tests.getUsersAccess().stream().map(UsersDto::toDto).collect(Collectors.toSet()),
                 tests.getQuestionsSet().stream().map(QuestionsDto::toDto).collect(Collectors.toSet()),
                 tests.getStatisticsSet().stream().map(StatisticsDto::toDto).collect(Collectors.toSet())
         );

@@ -14,7 +14,11 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedMethods("GET","POST","PUT","DELETE","PATCH","OPTIONS");
+                        .allowedOrigins("http://localhost:8081","http://192.168.43.81:8081")
+                        .allowedMethods("GET","POST","PUT","DELETE","PATCH","OPTIONS")
+                        .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
+                                "Access-Control-Request-Headers","Authorization","Access-Control-Allow-Origin","Access-Control-Allow-Methods","Access-Control-Allow-Headers")
+                        .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials");
             }
         };
     }

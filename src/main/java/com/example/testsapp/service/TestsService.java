@@ -9,6 +9,10 @@ import java.util.Optional;
 public interface TestsService {
     TestsDto getById(Long id);
     List<TestsDto> getAll();
-    void save(Tests test);
+    Tests save(Tests test);
     void delete(Long id);
+
+    void addUser(Long userId, Long testId);
+
+    Tests saveWithUser(Tests test, Long userId);
 }

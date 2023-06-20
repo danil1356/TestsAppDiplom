@@ -43,8 +43,8 @@ public class QuestionsDto implements Serializable {
                 questions.getQuestion(),
                 questions.getTest().getId(),
                 questions.getQuestionType().getId(),
-                questions.getAnswerSet().stream().map(AnswerDto::toDto).collect(Collectors.toSet()),
-                questions.getImageDataSet().stream().map(ImageDataDto::toDto).collect(Collectors.toSet())
+                questions.getAnswerSet()==null ? null : questions.getAnswerSet().stream().map(AnswerDto::toDto).collect(Collectors.toSet()),
+                questions.getImageDataSet()==null  ? null : questions.getImageDataSet().stream().map(ImageDataDto::toDto).collect(Collectors.toSet())
         );
     }
 }

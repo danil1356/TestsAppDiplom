@@ -1,7 +1,11 @@
 package com.example.testsapp.representation.Controller;
 
+import com.example.testsapp.data.Entity.Tests;
+import com.example.testsapp.data.Entity.Users;
 import com.example.testsapp.representation.DTO.TestsDto;
+import com.example.testsapp.representation.DTO.UsersDto;
 import com.example.testsapp.service.TestsService;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/Tests")
@@ -47,15 +53,15 @@ public class TestsRestController {
     }
 
 
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<TestsDto> post(@RequestBody TestsDto testsDto)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<TestsDto> post(@RequestBody TestsDto testsDto, @PathVariable Long userId)
     {
         if (testsDto == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        this.testsService.save(testsDto.toEntity());
-        return ResponseEntity.ok().build();
+        Tests tests = this.testsService.saveWithUser(testsDto.toEntity(), userId);
+        return ResponseEntity.ok(TestsDto.toDto(tests));
     }
 
 
@@ -68,7 +74,7 @@ public class TestsRestController {
         }
 
         this.testsService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(testsDto);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
@@ -80,6 +86,18 @@ public class TestsRestController {
 
         this.testsService.save(testsDto.toEntity());
         return ResponseEntity.ok().build();
+    }
+
+    // TODO: 29.05.2023 Сделать от теста
+    @RequestMapping(value = "/addAccess/{userId}/{testId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<TestsDto> accessAdd(@PathVariable Long userId, @PathVariable Long testId){
+
+        if (userId==null || testId==null){
+            return ResponseEntity.badRequest().build();
+        }
+        this.testsService.addUser(userId, testId);
+        return ResponseEntity.ok().build();
+
     }
 
 }

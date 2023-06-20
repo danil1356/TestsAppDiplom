@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface StatisticsService {
     StatisticsDto getById(Long id);
     List<StatisticsDto> getAll();
-    void save(Statistics statistic);
+    Statistics save(Statistics statistic);
     void delete(Long id);
 }

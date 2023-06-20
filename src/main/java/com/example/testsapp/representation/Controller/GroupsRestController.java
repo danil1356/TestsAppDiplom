@@ -1,8 +1,8 @@
 package com.example.testsapp.representation.Controller;
 
-import com.example.testsapp.data.Entity.Answer;
-import com.example.testsapp.representation.DTO.AnswerDto;
-import com.example.testsapp.service.AnswerService;
+import com.example.testsapp.data.Entity.Groups;
+import com.example.testsapp.representation.DTO.GroupsDTO;
+import com.example.testsapp.service.GroupsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,32 +13,32 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/Answer")
-public class AnswerRestController {
+@RequestMapping(value = "/Groups")
+public class GroupsRestController {
 
     @Autowired
-    private AnswerService answerService;
+    private GroupsService groupsService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<AnswerDto> get (@PathVariable Long id)
+    public ResponseEntity<GroupsDTO> get(@PathVariable Long id)
     {
         if(id == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        AnswerDto answerDTO = this.answerService.getById(id);
+        GroupsDTO groupsDTO = this.groupsService.getById(id);
 
-        if (answerDTO == null) {
+        if (groupsDTO == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(answerDTO);
+        return ResponseEntity.ok(groupsDTO);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<AnswerDto>> getAllUser ()
+    public ResponseEntity<List<GroupsDTO>> getAll()
     {
-        List<AnswerDto> list = this.answerService.getAll();
+        List<GroupsDTO> list = this.groupsService.getAll();
 
         if (list.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -49,37 +49,37 @@ public class AnswerRestController {
 
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDto> post(@RequestBody AnswerDto answerDTO)
+    public ResponseEntity<GroupsDTO> post(@RequestBody GroupsDTO groupsDTO)
     {
-        if (answerDTO == null) {
+        if (groupsDTO == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        this.answerService.save(answerDTO.toEntity());
-        return ResponseEntity.ok(answerDTO);
+        Groups groups = this.groupsService.save(groupsDTO.toEntity());
+        return ResponseEntity.ok(GroupsDTO.toDto(groups));
     }
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<AnswerDto> delete(@PathVariable Long id)
+    public ResponseEntity<GroupsDTO> delete(@PathVariable Long id)
     {
-        AnswerDto answerDTO = this.answerService.getById(id);
-        if (answerDTO == null) {
+        GroupsDTO groupsDTO = this.groupsService.getById(id);
+        if (groupsDTO == null) {
             return ResponseEntity.notFound().build();
         }
 
-        this.answerService.delete(id);
-        return ResponseEntity.ok(answerDTO);
+        this.groupsService.delete(id);
+        return ResponseEntity.ok(groupsDTO);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public ResponseEntity<AnswerDto> update(@RequestBody @Validated AnswerDto answerDTO, UriComponentsBuilder builder)
+    public ResponseEntity<GroupsDTO> update(@RequestBody @Validated GroupsDTO groupsDTO, UriComponentsBuilder builder)
     {
-        if(answerDTO == null) {
+        if(groupsDTO == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        this.answerService.save(answerDTO.toEntity());
-        return ResponseEntity.ok(answerDTO);
+        this.groupsService.save(groupsDTO.toEntity());
+        return ResponseEntity.ok().build();
     }
 }
